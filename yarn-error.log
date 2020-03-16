@@ -1,0 +1,46 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn add
+
+PATH: 
+  .:/Users/matt/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.14.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/matt/coding/Spike-Weekend_project_server/package.json: Unexpected string in JSON at position 98
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "spike-weekend_project_server",
+    "author": "Matthew_Kimlinger",
+    "license": "ISC"
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "axios": "^0.19.0",
+      "bcryptjs": "^2.4.3",
+      "body-parser": "^1.19.0",
+      "dotenv": "^4.0.0",
+      "express": "^4.16.4",
+      "pg": "^7.9.0",
+    },
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
