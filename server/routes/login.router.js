@@ -6,8 +6,8 @@ const jsonWebToken = require('jsonwebtoken');
 const hashScripts = require('../modules/encryption');
 router.use(bodyParser.json());
 
-router.post('/login', async (req, res) => {
-    console.log('login/login router hit');
+router.post('/', async (req, res) => {
+    console.log('login router hit');
     const usernameEntered = req.body.username;
     const passwordEntered = req.body.password;
     const hashedPassword = hashScripts.hashPassword(req.body.password);
