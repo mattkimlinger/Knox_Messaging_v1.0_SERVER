@@ -33,7 +33,7 @@ const host = 'Knox.cognitiveservices.azure.com';
 //             //     detectionModel: detection_01,
 //             //     Host: Knox.cognitiveservices.azure.com,
 //             //     Content-Type: application/ json,
-//             //     Ocp-Apim-Subscription-Key: ${subscriptionKey}
+//             //     Ocp-Apim-Subscription-Key: `${subscriptionKey}`
 //             // },
 //             "data": JSON.stringify({
 //                 "faceId": "5e71e51f-44c0-4aee-89c0-3914bad97087",
@@ -58,7 +58,7 @@ module.exports = router;
 // const contentType = 'application/json';
 //     const subscriptionKey = `${process.env.AZURE_SUBSCRIPTION_KEY}`;
 //     const host = 'Knox.cognitiveservices.azure.com';
-console.log('subscriptionKey: ', subscriptionKey);
+// console.log('subscriptionKey: ', subscriptionKey);
 
 // axios(
 //     {
