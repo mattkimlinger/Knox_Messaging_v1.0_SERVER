@@ -1,7 +1,7 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const bodyParser = require('body-parser');
-const encryptLib = require('../modules/encryption');
+const encryption = require('../modules/encryption');
 
 const router = express.Router();
 
@@ -24,18 +24,18 @@ router.post("/", (req, res) => {
     const lastName = req.body.lastName;
     const email = req.body.email;
     const date = getCurrentDate();
-    const password = encryptLib.encryptPassword(req.body.password);
+    const password = encryption.hashPassword(req.body.password);
   
 
     console.log('req.body', req.body);
-
+    res.sendStatus(200);
     let postNewUser = `INSERT INTO "users" ("username", "first_name", "last_name", "email", "password", "date_created" ) VALUES ($1, $2, $3, $4, $5, $6);`;
     pool.query(
         postNewUser,
         [username, firstName, lastName, email, password, date]
     ).then((response) => {
-        res.sendStatus(500)
         console.log('registerUser query response:', response)
+        res.sendStatus(500)
     }).catch((error) => {
         console.log('register error:', error);
     });

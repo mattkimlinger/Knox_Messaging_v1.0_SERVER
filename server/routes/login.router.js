@@ -24,14 +24,14 @@ router.post('/', async (req, res) => {
         !usernameSearch.rows[0] ||
         !usernameSearch.rows[0].password
     ) {
-        console.log('No Usernames found');
+        console.log('No Matching Usernames Found');
         res.sendStatus(401, '{"error" : "No Usernames found"}');
         return
     }
-    let userId = usernameSearch.rows[0].id;
-    let username = usernameSearch.rows[0].username;
-    let storedPassword = usernameSearch.rows[0].password;
-    let match = hashScripts.comparePassword(passwordEntered, storedPassword)
+    const userId = usernameSearch.rows[0].id;
+    const username = usernameSearch.rows[0].username;
+    const storedPassword = usernameSearch.rows[0].password;
+    const match = hashScripts.comparePassword(passwordEntered, storedPassword)
     if (!match) {
         console.log('incorrect password')
         res.status(401).send('{"errorMessage":"Password is incorrect."}');

@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const faceDetect = require('./routes/faceDetect.router');
 const faceVerify = require('./routes/faceVerify.router');
 const loginRouter = require('./routes/login.router');
-const registerRouter = require('./routes/registerUser.router');
+const registerRouter = require('./routes/registerUser. router');
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
