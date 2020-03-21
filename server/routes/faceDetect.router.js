@@ -30,7 +30,7 @@ router.post('/faceDetect', upload.none(), (req, res) => {
     // }).catch((error) => {
     //     console.log('error', error);
     // })
-    res.sendStatus(200);
+    // res.sendStatus(200);
 }
 );
 
