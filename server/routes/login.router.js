@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
         const { username, storedPassword } = userInfo || {};
 
         //salts & hash entered pass word, than compares with the saved password
-        const match = hashScripts.comparePassword(passwordEntered, storedPassword)
+        const match = hashScripts.comparePassword(passwordEntered, storedPassword);
         //case, passwords do not match, send a 401 status
         //else send user data
         if (!match) {
@@ -23,10 +23,10 @@ router.post('/', async (req, res) => {
             res.status(401).send('{"errorMessage":"Password is incorrect."}');
             return;
         }
-
+        //else, if match is true
         try {
             console.log('userInfo.userId : ', userInfo.userId);
-            
+
             //registering a token for the user
             const token = jsonWebToken.sign({
                 sub: userInfo.userId,
@@ -46,8 +46,6 @@ router.post('/', async (req, res) => {
                 FROM users WHERE id = $1`, [userInfo.userId]
             );
             console.log('userInfoQuery declared');
-            // console.log('userInfoQuery succeeded values: ', userInfoQuery);
-
             const contactsQuery = await pool.query(
                 `SELECT contact_id
                 FROM contacts 
@@ -55,33 +53,27 @@ router.post('/', async (req, res) => {
                 [userInfo.userId]
             );
             console.log('contactsQuery declared');
-            const messagesReceivedQuery = await pool.query(
+
+            const userMessagesQuery = await pool.query(
                 `SELECT *
                 FROM messages
-                WHERE receiver_id = $1`,
-                [userInfo.userId]
+                WHERE receiver_id = $1  OR sender_id = $2 ORDER BY id DESC`,
+                [userInfo.userId,
+                    userInfo.userId]
             );
-            console.log('messagesReceivedQuery declared');
-            const messagesSentQuery = await pool.query(
-                `SELECT *
-                FROM messages 
-                WHERE sender_id = $1`,
-                [userInfo.userId]
-            );
-            console.log('messagesSentQuery declared');
+            console.log('userMessagesQuery: ', userMessagesQuery.rows);
             //structuring response
             const userData = {
-
-                userInfo: userInfoQuery,
-                contacts: contactsQuery,
-                messagesReceived: messagesReceivedQuery,
-                messagesSent: messagesSentQuery
+                token: token,
+                userInfo: userInfoQuery.rows,
+                contacts: contactsQuery.rows,
+                userMessages: userMessagesQuery.rows
             };
             console.log('token: ', token);
-            res.json({
-                token: `${token}`,
-                userData: userData
-            })
+            //send user data back in response
+            res.send(
+                userData
+            )
         } catch (error) {
             //gathering user data was not successful
             console.log('error', error);
@@ -92,6 +84,7 @@ router.post('/', async (req, res) => {
         res.sendStatus(500);
     }
 })
+
 
 const getUserInfo = async (req, res) => {
     const usernameEntered = req.body.username;
@@ -119,5 +112,10 @@ const getUserInfo = async (req, res) => {
     }
 }
 
+// router.get('/', async (req, res) => {
+//     try {
+//         const token = req.body.token;
+//     }
+// })
 
 module.exports = router;

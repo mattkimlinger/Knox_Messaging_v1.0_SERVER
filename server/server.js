@@ -5,8 +5,8 @@ require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
 // const onBoardingRouter = require('./routes/onboarding.router');
-const faceDetect = require('./routes/faceDetect.router');
-const faceVerify = require('./routes/faceVerify.router');
+// const faceDetect = require('./routes/faceDetect.router');
+// const faceVerify = require('./routes/faceVerify.router');
 const loginRouter = require('./routes/login.router');
 const registerRouter = require('./routes/registerUser. router');
 // Body parser middleware
