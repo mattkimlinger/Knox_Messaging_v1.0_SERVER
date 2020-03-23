@@ -54,6 +54,15 @@ router.post('/', async (req, res) => {
             );
             console.log('contactsQuery declared');
 
+            const conversationsQuery = await pool.query(
+                `SELECT *
+                FROM conversations 
+                WHERE receiver_id = $1
+                OR sender_id = $2`,
+                [userInfo.userId, userInfo.userId]
+            );
+            console.log('conversationsQuery declared');
+
             const userMessagesQuery = await pool.query(
                 `SELECT *
                 FROM messages
@@ -66,7 +75,8 @@ router.post('/', async (req, res) => {
                 token: token,
                 userInfo: userInfoQuery.rows,
                 contacts: contactsQuery.rows,
-                userMessages: userMessagesQuery.rows
+                userMessages: userMessagesQuery.rows,
+                conversations: conversationsQuery.rows
             };
             console.log('token: ', token);
             //send user data back in response
