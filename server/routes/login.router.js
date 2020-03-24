@@ -20,7 +20,8 @@ router.post('/', async (req, res) => {
         //else send user data
         if (!match) {
             console.log('incorrect password')
-            res.status(401).send('{"errorMessage":"Password is incorrect."}');
+            res.sendStatus(402);
+            // res.send({ "status": 400, "error": 'Password is incorrect.' });
             return;
         }
         //else, if match is true
@@ -35,9 +36,9 @@ router.post('/', async (req, res) => {
                 "userKey", {
                 expiresIn: "3 hours"
             });
-            console.log('token declared');
-            //gathering user data from the database
+            // console.log('token declared');
 
+            //gathering user data from the database
             const userInfoQuery = await pool.query(
                 `SELECT
                  id, username,
@@ -98,19 +99,22 @@ router.post('/', async (req, res) => {
 const getUserInfo = async (req, res) => {
     const usernameEntered = req.body.username;
     const passwordEntered = req.body.password;
+    //both entry valid safety check
     if (!usernameEntered || !passwordEntered) {
         res.status(400).send("Error, Username or password not supplied");
         return;
     }
-    const query = `SELECT "id", "username", "password" FROM "users" WHERE "username" = '${usernameEntered}'`
-    const usernameSearch = await pool.query(query);
+    const usernameSearch = await pool.query(
+        `SELECT id, username, password FROM users WHERE username = $1`, [usernameEntered]
+    );
+    //safety check on password entry
     if (!usernameSearch ||
         !usernameSearch.rows ||
         !usernameSearch.rows[0] ||
         !usernameSearch.rows[0].password
     ) {
         console.log('No Matching Usernames Found');
-        res.sendStatus(401, '{"error" : "No Usernames found"}');
+        res.send({ "status": 402, "error": 'No Matching Usernames found' });
         return;
     }
     return {
