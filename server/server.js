@@ -7,8 +7,9 @@ const bodyParser = require('body-parser');
 // const onBoardingRouter = require('./routes/onboarding.router');
 // const faceDetect = require('./routes/faceDetect.router');
 // const faceVerify = require('./routes/faceVerify.router');
-const loginRouter = require('./routes/login.router');
 const registerRouter = require('./routes/registerUser. router');
+const loginRouter = require('./routes/login.router');
+const sendMessageRouter = require('./routes/sendMessage.router');
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -19,9 +20,11 @@ app.use(bodyParser.urlencoded({
 
 //-----------/* Routes */---------------//
 // app.use('/api', onBoardingRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
 // app.use('/api', faceDetect);
+app.use('/register', registerRouter);
+app.use('/login', loginRouter);
+app.use('/sendMessage', sendMessageRouter);
+
 //------/* Serve static files */-------//
 app.use(express.static('build'));
 

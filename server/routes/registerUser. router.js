@@ -1,8 +1,8 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const bodyParser = require('body-parser');
-const encryption = require('../modules/encryption');
-
+// const encryption = require('../modules/encryption');
+const tokenValidation =require('../modules/tokenValidation')
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -20,18 +20,21 @@ function getCurrentDate() {
 
 router.post("/", (req, res) => {
     try {
-        const username = req.body.username;
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const email = req.body.email;
+        const userToken = req.body.token;
+        const userId = req.body.userId;
+        const receiverId = req.body.receiverId;
+        const message = req.body.message;
         const date = getCurrentDate();
-        const password = encryption.hashPassword(req.body.password);
-        console.log('req.body', req.body);
-        let postNewUser = `INSERT INTO "users" ("username", "first_name", "last_name", "email", "password", "date_created" ) VALUES ($1, $2, $3, $4, $5, $6);`;
-        pool.query(
-            postNewUser,
-            [username, firstName, lastName, email, password, date]
-        );
+        const token = tokenValidation(userToken);
+        console.log('token', token);
+        
+        // const password = encryption.hashPassword(req.body.password);
+        // console.log('req.body', req.body);
+        // let postNewUser = `INSERT INTO "users" ("username", "first_name", "last_name", "email", "password", "date_created" ) VALUES ($1, $2, $3, $4, $5, $6);`;
+        // pool.query(
+        //     postNewUser,
+        //     [username, firstName, lastName, email, password, date]
+        // );
         res.sendStatus(200);
     }
     catch (error) {

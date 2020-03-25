@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pool = require('../modules/pool');
 const router = express.Router();
-const jsonWebToken = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const hashScripts = require('../modules/encryption');
 router.use(bodyParser.json());
 
@@ -29,13 +29,10 @@ router.post('/', async (req, res) => {
             console.log('userInfo.userId : ', userInfo.userId);
 
             //registering a token for the user
-            const token = jsonWebToken.sign({
-                sub: userInfo.userId,
+            const token = jwt.sign({
+                userId: userInfo.userId,
                 username: username
-            },
-                "userKey", {
-                expiresIn: "3 hours"
-            });
+            },"secret", {expiresIn: "3 hours"});
             // console.log('token declared');
 
             //gathering user data from the database
@@ -44,13 +41,18 @@ router.post('/', async (req, res) => {
                  id, username,
                 first_name, last_name, 
                 email, date_created 
-                FROM users WHERE id = $1`, [userInfo.userId]
+                FROM users WHERE id = $1;`, [userInfo.userId]
             );
             console.log('userInfoQuery declared');
             const contactsQuery = await pool.query(
-                `SELECT contact_id
+                `SELECT
+                contacts.contact_id as contact_id,
+                users.first_name as contact_first_name,
+                users.last_name as contact_last_name,
+                users.username as contact_username
                 FROM contacts 
-                WHERE user_id = $1`,
+                JOIN users ON contacts.contact_id = users.id
+                WHERE user_id = $1;`,
                 [userInfo.userId]
             );
             console.log('contactsQuery declared');
