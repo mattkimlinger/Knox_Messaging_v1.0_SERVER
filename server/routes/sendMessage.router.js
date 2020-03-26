@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
             OR receiver_id = $3
             AND sender_id = $4;
         `
-        const existingConversationCheck = () => {
+        const existingConversationCheck = async () => {
             //Query to check if a conversation already exists
             return (
                 await pool.query(
