@@ -9,10 +9,11 @@ ON BOTH PROJECT FOLDERS
 
 *Knox_Messaging_v1.0*
 https://github.com/mattkimlinger/Knox_Messaging_v1.0
+
 *Knox_Messaging_v1.0_SERVER*
 https://github.com/mattkimlinger/Knox_Messaging_v1.0_SERVER
 
- ### 1: Dependancies
+ ### 1: Database
 in postico create a new databse named
 *knox_messaging_v1.0*
 
