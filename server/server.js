@@ -10,7 +10,8 @@ const bodyParser = require('body-parser');
 const registerRouter = require('./routes/registerUser. router');
 const loginRouter = require('./routes/login.router');
 const sendMessageRouter = require('./routes/sendMessage.router');
-// Body parser middleware
+
+const updateUserInfo = require('./routes/UpdateUserInfo. router');// Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   parameterLimit: 100000,
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/sendMessage', sendMessageRouter);
+app.use('/updateUserInfo', updateUserInfo);
 
 //------/* Serve static files */-------//
 app.use(express.static('build'));

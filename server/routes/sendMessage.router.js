@@ -9,14 +9,14 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.post("/", async (req, res) => {
-    try {
-        const body = req.body;
-        const token = await body.token;
-        // const tokenValidated = tokenValidation(token);
+    const body = req.body;
+    const token =  body.token;
+    const tokenToId = await tokenValidation(token);
+    const senderId = body.userId;
+    if (tokenToId === senderId) {
         console.log('tokenValidation(token): ', tokenValidation(token));
 
         const conversationId = body.conversationId;
-        const senderId = body.userId;
         const receiverId = body.receiverId;
         const message = body.message;
         console.log('req.body', req.body);
@@ -100,10 +100,9 @@ router.post("/", async (req, res) => {
         }
 
 
-    }
-    catch (error) {
-        console.log('POST New Message Failed: Generic Error:', error);
-        res.sendStatus(500)
+    } else {
+        console.log('Token Not Valid:', error);
+        res.sendStatus(400)
     };
 })
 
