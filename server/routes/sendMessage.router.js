@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
             )
         }
         //if no conversations exist between these two users, create one
-        if (!existingConversationCheck()) {
+        if (!existingConversationCheck() || conversationId === 0 ) {
             try {
                 const newConversation = `
                     INSERT INTO conversations ( receiver_id, sender_id, last_message)
@@ -60,15 +60,16 @@ router.post("/", async (req, res) => {
         // update conversation and insert new message
         if (existingConversationCheck()) {
             try {
+
                 const updateConversation = `
                 UPDATE conversations
                 SET receiver_id = $1,
-                sender_id = $3,
-                last_message = $4
-                WHERE sender_id = $5
-                AND receiver_id = $6
-                OR receiver_id = $7
-                ANd sender_id = $8;
+                sender_id = $2,
+                last_message = $3
+                WHERE sender_id = $4
+                AND receiver_id = $5
+                OR receiver_id = $6
+                ANd sender_id = $7;
                 `;
                 pool.query(
                     updateConversation,
@@ -77,6 +78,8 @@ router.post("/", async (req, res) => {
                         senderId, receiverId, senderId, receiverId
                     ]
                 );
+                console.log('update conversation finsished');
+                
                 // res.sendStatus(200);
             } catch (error) {
                 console.log('COULD NOT INSERT MESSAGE error: ', error);
@@ -92,7 +95,28 @@ router.post("/", async (req, res) => {
                     postMessage,
                     [conversationId, senderId, receiverId, message]
                 );
-                res.sendStatus(200);
+                const userMessagesQuery = await pool.query(
+                    `SELECT *
+                    FROM messages
+                    WHERE receiver_id = $1  OR sender_id = $2 ORDER BY id DESC`,
+                    [senderId, senderId]
+                );
+                const conversationsQuery = await pool.query(
+                    `SELECT *
+                    FROM conversations 
+                    WHERE receiver_id = $1
+                    OR sender_id = $2`,
+                    [senderId, senderId]
+                );
+                const userData = {
+                    // contacts: contactsQuery.rows,
+                    userMessages: userMessagesQuery.rows,
+                    conversations: conversationsQuery.rows
+                };
+                console.log('sendMessage: userdata: ', userData);
+                res.send(
+                    userData
+                );
             } catch (error) {
                 console.log('COULD NOT INSERT MESSAGE error: ', error);
                  return res.sendStatus(500)
