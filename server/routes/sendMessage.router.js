@@ -59,6 +59,7 @@ router.post("/", async (req, res) => {
         //if conversation exist between these two recipients,
         // update conversation and insert new message
         if (existingConversationCheck()) {
+
             try {
 
                 const updateConversation = `
@@ -85,13 +86,14 @@ router.post("/", async (req, res) => {
                 console.log('COULD NOT INSERT MESSAGE error: ', error);
                 return res.sendStatus(500)
             }
+            let messages = [];
             try {
                 const postMessage = `
                     INSERT INTO messages 
                     ( conversation_id, sender_id, receiver_id, message)
                     VALUES ( $1, $2, $3, $4 );
                 `;
-                pool.query(
+                await pool.query(
                     postMessage,
                     [conversationId, senderId, receiverId, message]
                 );
