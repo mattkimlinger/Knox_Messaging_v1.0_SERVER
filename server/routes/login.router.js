@@ -70,6 +70,7 @@ router.post('/', async (req, res) => {
                 `SELECT *
                 FROM messages
                 WHERE receiver_id = $1  OR sender_id = $2 ORDER BY id DESC`,
+                
                 [userInfo.userId, userInfo.userId]
             );
             console.log('userMessagesQuery: ', userMessagesQuery.rows);
