@@ -1,5 +1,5 @@
 # Knox
-## A Secure Messaging Platform
+A Secure Messaging Platform
 ### created by Matt Kimlinger
 https://github.com/mattkimlinger
 ## Setup Instructions
