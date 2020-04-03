@@ -1,6 +1,7 @@
 # Knox
 ## A Secure Messaging Platform
 ### created by Matt Kimlinger
+https://github.com/mattkimlinger
 ## Setup Instructions
  ### 1: Dependancies
 in a teminal, use  'yarn install' or 'Npm install' to add dependencies
